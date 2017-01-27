@@ -24,9 +24,9 @@
                 <h3><span class="fa fa-user"></span> Local</h3>
 
                     <p>
-                        <strong>id</strong>: <%= user.id %><br>
-                        <strong>email</strong>: <%= user.localEmail %><br>
-                        <strong>password</strong>: <%= user.localPassword %>
+                        <strong>id</strong>: <%= user.get('id') %><br>
+                        <strong>email</strong>: <%= user.get('localEmail') %><br>
+                        <strong>password</strong>: <%= user.get('localPassword') %>
                     </p>
 
             </div>

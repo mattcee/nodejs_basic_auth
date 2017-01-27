@@ -12,13 +12,14 @@ module.exports = function(passport) {
 
   // used to serialize the user for the session
   passport.serializeUser(function(user, done) {
-    done(null, user.id);
+    done(null, user.get('id'));
   });
 
   // used to deserialize the user
   passport.deserializeUser(function(id, done) {
-    var user = User.where('id', id)
-    done(null, user);
+    new User({id: id}).fetch().then(function(user) {
+      done(null, user);
+    });
   });
 
   // =========================================================================
@@ -34,18 +35,14 @@ module.exports = function(passport) {
     passReqToCallback : true // allows us to pass back the entire request to the callback
   },
   function(req, email, password, done) {
-
     // asynchronous
-    // User.findOne wont fire unless data is sent back
     process.nextTick(function() {
-
-      var newUser = new User({
+      new User({
         localEmail: email,
         localPassword: User.generateHash(password)
+      }).save().then(function(model) {
+        return done(null, model.toJSON());
       });
-
-      newUser.save();
-      return done(null, newUser.refresh());
     });
   }));
 };
